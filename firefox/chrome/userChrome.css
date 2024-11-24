@@ -51,6 +51,11 @@
   opacity: 0.3;
 }
 
+/* Completely hide the "title changed" notification dot on pinned tabs */
+.tabbrowser-tab > .tab-stack > .tab-content[pinned][titlechanged] {
+  background-image: none !important;
+}
+
 
 /* No round shapes */
 
