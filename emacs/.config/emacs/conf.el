@@ -18,8 +18,13 @@
 (add-to-list 'org-structure-template-alist '("se" . "src emacs-lisp"))
 
 (use-package org-modern
-  :hook (org-ode . org-modern-mode)
+  :hook (org-mode . org-modern-mode)
   :init (global-org-modern-mode))
+
+(use-package svg-tag-mode
+  :custom
+  (svg-tag-tags
+        '(("TODO" . ((lambda (tag) (svg-tag-make tag)))))))
 
 (use-package org-appear
   :custom (org-appear-autoentities t)
@@ -53,6 +58,9 @@
     :config
     (org-roam-ui-mode)))
 
+(setq org-todo-keywords
+      '((type "TODO" "STARTED" "POLISH" "|" "DONE" "CANCELED")))
+
 (defun org-roam-goto-todo ()
   (interactive)
   (org-roam-node-visit (org-roam-node-from-title-or-alias "todo") t))
@@ -83,17 +91,9 @@
   (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
   (define-key evil-insert-state-map (kbd "C-v") 'cua-paste)
   (with-eval-after-load 'evil-maps
-    (define-key evil-motion-state-map (kbd "RET") nil))
+    (define-key evil-motion-state-map (kbd "RET") nil)
+    (define-key evil-normal-state-map (kbd "RET") 'my-newline))
   (evil-mode))
-
-(use-package drag-stuff
-  :config
-  (define-key drag-stuff-mode-map (drag-stuff--kbd 'k) 'drag-stuff-up)
-  (define-key drag-stuff-mode-map (drag-stuff--kbd 'j) 'drag-stuff-down)
-  (define-key drag-stuff-mode-map (drag-stuff--kbd 'h) 'drag-stuff-right)
-  (define-key drag-stuff-mode-map (drag-stuff--kbd 'l) 'drag-stuff-left)
-  (setq drag-stuff-modifier '(meta shift))
-  (drag-stuff-global-mode))
 
 ;; (define-key evil-motion-state-map (kbd "SPC") nil)
 ;; (define-key evil-motion-state-map (kbd "TAB") nil)
@@ -117,15 +117,27 @@
 
   (elpaca-wait)
 
-(use-package evil-commentary
-    :config
-    (evil-commentary-mode))
+(use-package drag-stuff
+  :config
+  (define-key drag-stuff-mode-map (drag-stuff--kbd 'k) 'drag-stuff-up)
+  (define-key drag-stuff-mode-map (drag-stuff--kbd 'j) 'drag-stuff-down)
+  (define-key drag-stuff-mode-map (drag-stuff--kbd 'h) 'drag-stuff-right)
+  (define-key drag-stuff-mode-map (drag-stuff--kbd 'l) 'drag-stuff-left)
+  (setq drag-stuff-modifier '(meta shift))
+  (drag-stuff-global-mode))
 
-  (use-package evil-collection
+(use-package evil-commentary
+  :config
+  (evil-commentary-mode))
+
+(use-package evil-collection
     :after evil
     :ensure t
     :config
+    (setq evil-collection-mode-list (delete "xref" evil-collection-mode-list))
+    (setq evil-collection-key-blacklist '("gr"))
     (evil-collection-init))
+
 
   (use-package evil-surround
     :ensure t
@@ -150,7 +162,7 @@
   :commands format-all-mode
   :hook (prog-mode . format-all-mode)
   :config
-  (setq-default format-all-formatters '(("C" (clang-format "-style=file:/home/phat_sumo/.clang-format"))
+  (setq-default format-all-formatters '(("C" (clang-format "-style=file:/home/tetrachromat/.clang-format"))
                                         ("Shell" (shfmt)))))
 
 (defun save-buffer-no-format ()
@@ -300,13 +312,6 @@ called at all."
     ;;(add-to-list 'completion-at-point-functions #'cape-line)
     (my/register-default-capfs))
 
-(use-package flycheck
-  :ensure t
-  :init (global-flycheck-mode))
-
-(use-package flycheck-haskell
-  :hook (haskell-mode . flycheck-haskell-setup))
-
 (use-package lua-mode
   :ensure t
   :custom
@@ -318,54 +323,25 @@ called at all."
 (use-package haskell-mode
   :ensure t
   :mode "\\.hs\\'"
-  :hook (;;(haskell-mode . interactive-haskell-mode)
-         (haskell-mode . turn-on-haskell-doc-mode)
-         (haskell-mode . haskell-indent-mode)
-         (haskell-mode . haskell-setup-outline-mode))
+  :hook ((haskell-mode . turn-on-haskell-doc-mode)
+         ;;(haskell-mode . haskell-interactive-mode)
+         (haskell-mode . haskell-indentation-mode))
   :bind (
         :map haskell-mode-map
         ("M-n" . haskell-goto-next-error)
         ("M-n" . haskell-goto-prev-error)))
 
-(use-package lsp-mode
-  :ensure t
-  :config
-  :init
-  (setq lsp-completion-provider :none)
-  ;; (setq lsp-enable-symbol-highlighting nil)
-  (setq lsp-keymap-prefix "C-c k")
-  (setq lsp-clients-lua-language-server-bin
-        "/usr/bin/lua-language-server")
-  (setq lsp-clients-lua-language-server-install-dir
-        "/usr/lib/lua-language-server")
-  (setq lsp-clients-lua-language-server-main-location
-        "/usr/lib/lua-language-server/main.lua")
-  (defun my/lsp-mode-setup-completion ()
-    (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
-                             '(flex)))
-  :hook ((lsp-completion-mode . my/lsp-mode-setup-completion)
-         (c-mode                . lsp)
-         (lua-mode              . lsp)
-         (haskell-mode          . lsp)
-         (haskell-literate-mode . lsp)
-         (lsp-mode              . lsp-enable-which-key-integration))
-  :commands lsp)
-
-(use-package lsp-haskell
-  :ensure t
-  :init
-  :hook (haskell-mode . lsp-deferred))
-
-(use-package lsp-ui :commands lsp-ui-mode)
-
-;; necessary so the bar doesn't get weird
 (use-package all-the-icons
   :ensure t)
 
 (use-package rainbow-mode
   :ensure t
   :hook ((c-mode    . rainbow-mode)
-         (conf-mode . rainbow-mode)))
+          (conf-mode . rainbow-mode))
+  :config
+  (setq rainbow-html-colors-alist nil)
+  (setq rainbow-r-colors-alist nil)
+)
 
 ;; (set-frame-parameter nil 'internal-border-width 10)
 (add-to-list 'default-frame-alist '(internal-border-width . 10))
@@ -392,11 +368,18 @@ called at all."
     (doom-themes-enable-bold   t)
     (doom-themes-enable-italic t)
     :config
-    (load-theme 'doom-meltbus t)
+    (load-theme 'doom-rend t)
     ;; flashing mode-line on error
     (doom-themes-visual-bell-config)))
 
   (theme-config)
+
+(use-package treesit-auto
+  :custom
+  (treesit-auto-install 'prompt)
+  :config
+  (treesit-auto-add-to-auto-mode-alist 'all)
+  (global-treesit-auto-mode))
 
 (defun frame-config (&optional frame)
   (setq inhibit-startup-screen t
@@ -421,8 +404,6 @@ called at all."
   ;; Enable traditional ligature support in eww-mode, if the
   ;; `variable-pitch' face supports it
   (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
-  ;; Enable all Cascadia Code ligatures in programming modes
-  ;; hopefully these are all in fira code too lol
   (ligature-set-ligatures 'prog-mode '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
                                       ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
                                       "!!." ">=>" ">>=" ">>>" ">>-" ">->" "-->" "-->" "---" "-<<"
@@ -565,11 +546,16 @@ called at all."
 
 (global-visual-line-mode)
 
-(make-directory "~/.config/emacs/backups" t)
-(make-directory "~/.config/emacs/autosave" t)
-(setq auto-save-file-name-transforms '((".*" "~/.config/emacs/autosave" t)))
-(setq backup-directory-alist '(("." . "~/.config/emacs/backups")))
+(make-directory "~/.config/emacs/backups/" t)
+(make-directory "~/.config/emacs/autosave/" t)
+(setq auto-save-file-name-transforms '((".*" "~/.config/emacs/autosave/" t)))
+(setq backup-directory-alist '(("." . "~/.config/emacs/backups/")))
 (setq backup-by-copying t)
+
+(use-package vterm
+  :ensure t
+  :config
+  (setq vterm-timer-delay 0.001))
 
 (evil-set-leader 'normal (kbd "SPC"))
 (evil-define-key 'normal 'global
@@ -582,9 +568,29 @@ called at all."
   (kbd "<leader>f")  'org-roam-node-find
   (kbd "<leader>c")  'org-roam-capture
   (kbd "<leader>d")  'org-roam-dailies-goto-today
+  (kbd "<leader>p")  'org-roam-dailies-goto-previous-note
+  (kbd "<leader>n")  'org-roam-dailies-goto-next-note
+  (kbd "<leader>y")  'org-roam-dailies-goto-yesterday
+  (kbd "<leader>m")  'org-roam-dailies-goto-tomorrow
+  (kbd "<leader>D")  'org-roam-dailies-goto-date
+  (kbd "<leader>b")  'org-roam-buffer-toggle
   (kbd "<leader>t")  'org-roam-goto-todo
   (kbd "<leader>%")  'split-and-follow-vertically
-  (kbd "<leader>\"") 'split-and-follow-horizontally)
+  (kbd "<leader>\"") 'split-and-follow-horizontally
+  (kbd "gr") 'evil-replace-with-register
+  (kbd "gR") 'xref-find-references)
+
+(defun my-newline ()
+  (interactive)
+  (evil-open-below 0)
+  (evil-normal-state)
+  (evil-previous-visual-line)
+  (evil-echo ""))
+
+(windmove-default-keybindings)
+
+(define-key minibuffer-local-completion-map (kbd "SPC")
+    (lambda () (interactive) (insert " ")))
 
 (require 'bind-key)
 
@@ -629,6 +635,8 @@ Called via the `after-load-functions special hook."
                   (interactive) (set-font-pixelsize 10))
                 'my-keys-minor-mode-map)
 
+(bind-key "C-S-u" 'universal-argument)
+
 (use-package fzf
   :bind
   ;; todo: add some
@@ -643,3 +651,9 @@ Called via the `after-load-functions special hook."
       ;; If nil, the fzf buffer will appear at the top of the window
       fzf/position-bottom t
       fzf/window-height 15))
+
+(defun insert-todo-h6 ()
+  (interactive)
+  (insert "****** TODO"))
+
+(bind-key "C-c t" 'insert-todo-h6 'org-mode-map)

@@ -1,5 +1,5 @@
 #+title: dots
-#+author: phat_sumo
+#+author: tetrachromat
 #+startup: fold
 
 
@@ -50,8 +50,27 @@ appearance features for org
 #+begin_src emacs-lisp
 
   (use-package org-modern
-    :hook (org-ode . org-modern-mode)
+    :hook (org-mode . org-modern-mode)
     :init (global-org-modern-mode))
+
+#+end_src
+
+[[https://github.com/rougier/svg-tag-mode][svg-tag-mode]] will give me some sick icons to use :>
+
+this needs a lot of help!!
+
+#+begin_src emacs-lisp
+  (use-package svg-tag-mode
+    :custom
+    (svg-tag-tags
+          '(("TODO" . ((lambda (tag) (svg-tag-make tag)))))))
+
+#+end_src
+
+[[https://github.com/awth13/org-appear][org-appear]] has a way to define a custom hook- i should set that up for evil mode.
+
+#+begin_src emacs-lisp
+
 
   (use-package org-appear
     :custom (org-appear-autoentities t)
@@ -59,9 +78,13 @@ appearance features for org
 
 #+end_src
 
+at some point, i need to set up [[https://cachestocaches.com/2016/9/my-workflow-org-agenda/][org-agenda]] properly and start using it!
+
 org-roam - so that i can get obsidian-like stuff in emacs!
 
 i also probably ought to include some [[https://systemcrafters.net/build-a-second-brain-in-emacs/capturing-notes-efficiently/][better capture templates]]
+
+at some point, i should check out using [[https://github.com/d12frosted/vulpea][vulpea]] to set up more automations around org-roam. it seems to be built mostly on top of roam, but with some additional features that might be especially useful.
 
 #+begin_src emacs-lisp
 
@@ -101,6 +124,20 @@ another ~org-roam-ui~ server!
       (org-roam-ui-mode)))
   #+end_src
 
+more todo states are nice
+
+these are pretty good for now, but i need to set up [[https://orgmode.org/manual/Faces-for-TODO-keywords.html][keyword faces]]
+
+also, i can basically define my states as a grammar, which will dictate the flow of processing, too
+
+soo... i should do that soon.
+
+#+begin_src emacs-lisp
+
+  (setq org-todo-keywords
+        '((type "TODO" "STARTED" "POLISH" "|" "DONE" "CANCELED")))
+
+#+end_src
 
 *** TODO add option for opening todo in new frame and current window
 
@@ -112,43 +149,75 @@ another ~org-roam-ui~ server!
 
 #+end_src
 
+
+[[https://karthinks.com/software/emacs-window-management-almanac/][emacs window management almanac]] might be helpful for this
+
 * evil
 
 vim is still technically better so let's install that
 
-one day we could check out [[https://github.com/meow-edit/meow][meow]] because i found [[https://esrh.me/posts/2021-12-18-switching-to-meow.html][some good reaasons for it]]
+one day we could check out [[https://github.com/meow-edit/meow][meow]] because i found [[https://esrh.me/posts/2021-12-18-switching-to-meow.html][some good reasons for it]]
 it behaves similarly to kakoune, and that /does/ seem a bit better tbh
 
 #+begin_src emacs-lisp
 
-    (use-package evil
-      :demand t
-      :after undo-tree
-      :init
-      (setq evil-want-keybinding nil)
-      (setq evil-want-minibuffer t)
-      :custom
-      (evil-undo-system 'undo-tree)
-      (evil-want-C-u-scroll t)
-      (evil-want-C-u-delete t)
-      (evil-want-C-i-jump t)
-      (evil-want-integration t)
-      (evil-auto-indent nil)
-      (evil-shift-width 2)
-      :config
-      (setq evil-default-cursor        'hbar
-            evil-normal-state-cursor   'hbar
-            evil-insert-state-cursor   'hbar
-            evil-visual-state-cursor   'hbar
-            evil-motion-state-cursor   'hbar
-            evil-replace-state-cursor  'hbar
-            evil-operator-state-cursor 'hbar)
-      (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
-      (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
-      (define-key evil-insert-state-map (kbd "C-v") 'cua-paste)
-      (with-eval-after-load 'evil-maps
-        (define-key evil-motion-state-map (kbd "RET") nil))
-      (evil-mode))
+      (use-package evil
+        :demand t
+        :after undo-tree
+        :init
+        (setq evil-want-keybinding nil)
+        (setq evil-want-minibuffer t)
+        :custom
+        (evil-undo-system 'undo-tree)
+        (evil-want-C-u-scroll t)
+        (evil-want-C-u-delete t)
+        (evil-want-C-i-jump t)
+        (evil-want-integration t)
+        (evil-auto-indent nil)
+        (evil-shift-width 2)
+        :config
+        (setq evil-default-cursor        'hbar
+              evil-normal-state-cursor   'hbar
+              evil-insert-state-cursor   'hbar
+              evil-visual-state-cursor   'hbar
+              evil-motion-state-cursor   'hbar
+              evil-replace-state-cursor  'hbar
+              evil-operator-state-cursor 'hbar)
+        (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
+        (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
+        (define-key evil-insert-state-map (kbd "C-v") 'cua-paste)
+        (with-eval-after-load 'evil-maps
+          (define-key evil-motion-state-map (kbd "RET") nil)
+          (define-key evil-normal-state-map (kbd "RET") 'my-newline))
+        (evil-mode))
+
+      ;; (define-key evil-motion-state-map (kbd "SPC") nil)
+      ;; (define-key evil-motion-state-map (kbd "TAB") nil)
+
+        (use-package undo-tree
+          :demand t
+          :custom ((undo-tree-auto-save-history t)
+             (undo-tree-history-directory-alist '(("." . "~/.config/emacs/undo"))))
+          :config
+          ;; by default, undo-tree will panic and break if it's bindings are overridden
+          ;; this is _not_ helpful, so just redefine that to nil
+          (defun undo-tree-overridden-undo-bindings-p () nil)
+          ;; prevent undo-tree from writing unnecessary info to the echo area,
+          ;; dumping it to **Messages** instead
+          (defun undo-tree-save-history-suppress (undo-tree-save-history &rest args)
+      (let ((message-log-max nil)
+            (inhibit-message t))
+        (apply undo-tree-save-history args)))
+          (advice-add 'undo-tree-save-history :around 'undo-tree-save-history-suppress)
+          (global-undo-tree-mode))
+
+        (elpaca-wait)
+
+#+end_src
+
+****** TODO drag-stuff is ok, but i should really just use the built-in [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Transpose.html][transpose]] feature
+
+#+begin_src emacs-lisp
 
     (use-package drag-stuff
       :config
@@ -159,30 +228,8 @@ it behaves similarly to kakoune, and that /does/ seem a bit better tbh
       (setq drag-stuff-modifier '(meta shift))
       (drag-stuff-global-mode))
 
-    ;; (define-key evil-motion-state-map (kbd "SPC") nil)
-    ;; (define-key evil-motion-state-map (kbd "TAB") nil)
-
-      (use-package undo-tree
-        :demand t
-        :custom ((undo-tree-auto-save-history t)
-           (undo-tree-history-directory-alist '(("." . "~/.config/emacs/undo"))))
-        :config
-        ;; by default, undo-tree will panic and break if it's bindings are overridden
-        ;; this is _not_ helpful, so just redefine that to nil
-        (defun undo-tree-overridden-undo-bindings-p () nil)
-        ;; prevent undo-tree from writing unnecessary info to the echo area,
-        ;; dumping it to **Messages** instead
-        (defun undo-tree-save-history-suppress (undo-tree-save-history &rest args)
-    (let ((message-log-max nil)
-          (inhibit-message t))
-      (apply undo-tree-save-history args)))
-        (advice-add 'undo-tree-save-history :around 'undo-tree-save-history-suppress)
-        (global-undo-tree-mode))
-
-      (elpaca-wait)
 
 #+end_src
-
 
 finally, post-load plugin interactions
 
@@ -191,12 +238,21 @@ finally, post-load plugin interactions
     (use-package evil-commentary
       :config
       (evil-commentary-mode))
+#+end_src
+
+for whatever reason, evil-collection has some strange obsession with overriding ~gr~ with an xref command-
+even with it explicitly removed from ~evil-collection-mode-list~!- so i've blacklisted it from overriding those keys. weird.
+
+#+begin_src emacs-lisp
 
     (use-package evil-collection
       :after evil
       :ensure t
       :config
+      (setq evil-collection-mode-list (delete "xref" evil-collection-mode-list))
+      (setq evil-collection-key-blacklist '("gr"))
       (evil-collection-init))
+
 
     (use-package evil-surround
       :ensure t
@@ -219,7 +275,7 @@ finally, post-load plugin interactions
 
 #+end_src
 
-yoinked from [[https://github.com/emacs-evil/evil/issues/622][emacs-evil github issue]]
+yoinked from [[https://github.com/emacs-evil/evil/issues/622][this emacs-evil github issue]]
 
 at some point, i might want to set up custom evil-ex commands per mode
 
@@ -233,7 +289,7 @@ format-all is here so that load order makes sense (gotta fix that sometime)
     :commands format-all-mode
     :hook (prog-mode . format-all-mode)
     :config
-    (setq-default format-all-formatters '(("C" (clang-format "-style=file:/home/phat_sumo/.clang-format"))
+    (setq-default format-all-formatters '(("C" (clang-format "-style=file:/home/tetrachromat/.clang-format"))
                                           ("Shell" (shfmt)))))
 
   (defun save-buffer-no-format ()
@@ -399,19 +455,6 @@ extensions via cape!
 
 #+end_src
 
-flycheck necessary for errors
-
-#+begin_src emacs-lisp
-
-  (use-package flycheck
-    :ensure t
-    :init (global-flycheck-mode))
-
-  (use-package flycheck-haskell
-    :hook (haskell-mode . flycheck-haskell-setup))
-
-#+end_src
-
 let's add some additional language support too
 
 #+begin_src emacs-lisp
@@ -427,15 +470,28 @@ let's add some additional language support too
   (use-package haskell-mode
     :ensure t
     :mode "\\.hs\\'"
-    :hook (;;(haskell-mode . interactive-haskell-mode)
-           (haskell-mode . turn-on-haskell-doc-mode)
-           (haskell-mode . haskell-indent-mode)
-           (haskell-mode . haskell-setup-outline-mode))
+    :hook ((haskell-mode . turn-on-haskell-doc-mode)
+           ;;(haskell-mode . haskell-interactive-mode)
+           (haskell-mode . haskell-indentation-mode))
     :bind (
           :map haskell-mode-map
           ("M-n" . haskell-goto-next-error)
           ("M-n" . haskell-goto-prev-error)))
 
+#+end_src
+
+** deprecated
+
+flycheck necessary for errors
+
+#+begin_src deprecated
+
+  (use-package flycheck
+    :ensure t
+    :init (global-flycheck-mode))
+
+  (use-package flycheck-haskell
+    :hook (haskell-mode . flycheck-haskell-setup))
 
 #+end_src
 
@@ -443,7 +499,7 @@ now for some lsp
 
 at some point i'll need to add [[https://emacs-lsp.github.io/lsp-mode/page/languages/][new languages]]
 
-#+begin_src emacs-lisp
+#+begin_src deprecated
 
   (use-package lsp-mode
     :ensure t
@@ -481,22 +537,32 @@ so i guess i'll just toss some new language servers in there at some point
 
 also let's grab some extensions too
 
-#+begin_src emacs-lisp
+#+begin_src deprecated
 
   (use-package lsp-ui :commands lsp-ui-mode)
 
 #+end_src
 
 * pretty
+
+necessary so the bar doesn't get weird
+
 #+begin_src emacs-lisp
-  ;; necessary so the bar doesn't get weird
   (use-package all-the-icons
     :ensure t)
+
+#+end_src
+
+#+begin_src emacs-lisp
 
   (use-package rainbow-mode
     :ensure t
     :hook ((c-mode    . rainbow-mode)
-           (conf-mode . rainbow-mode)))
+            (conf-mode . rainbow-mode))
+    :config
+    (setq rainbow-html-colors-alist nil)
+    (setq rainbow-r-colors-alist nil)
+  )
 
   ;; (set-frame-parameter nil 'internal-border-width 10)
   (add-to-list 'default-frame-alist '(internal-border-width . 10))
@@ -531,13 +597,27 @@ TODO configure possible colors
       (doom-themes-enable-bold   t)
       (doom-themes-enable-italic t)
       :config
-      (load-theme 'doom-meltbus t)
+      (load-theme 'doom-rend t)
       ;; flashing mode-line on error
       (doom-themes-visual-bell-config)))
 
     (theme-config)
 
   #+end_src
+
+[[https://github.com/renzmann/treesit-auto][treesit-auto]] enables treesitter wherever possible
+
+#+begin_src emacs-lisp
+
+(use-package treesit-auto
+  :custom
+  (treesit-auto-install 'prompt)
+  :config
+  (treesit-auto-add-to-auto-mode-alist 'all)
+  (global-treesit-auto-mode))
+
+
+#+end_src
 
 let's add some other visual config to remove on frame creation, too
 
@@ -572,8 +652,6 @@ let's add some other visual config to remove on frame creation, too
     ;; Enable traditional ligature support in eww-mode, if the
     ;; `variable-pitch' face supports it
     (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
-    ;; Enable all Cascadia Code ligatures in programming modes
-    ;; hopefully these are all in fira code too lol
     (ligature-set-ligatures 'prog-mode '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
                                         ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
                                         "!!." ">=>" ">>=" ">>>" ">>-" ">->" "-->" "-->" "---" "-<<"
@@ -743,11 +821,25 @@ up the file doesn't break hardlinks)
 
 #+begin_src emacs-lisp
 
-  (make-directory "~/.config/emacs/backups" t)
-  (make-directory "~/.config/emacs/autosave" t)
-  (setq auto-save-file-name-transforms '((".*" "~/.config/emacs/autosave" t)))
-  (setq backup-directory-alist '(("." . "~/.config/emacs/backups")))
+  (make-directory "~/.config/emacs/backups/" t)
+  (make-directory "~/.config/emacs/autosave/" t)
+  (setq auto-save-file-name-transforms '((".*" "~/.config/emacs/autosave/" t)))
+  (setq backup-directory-alist '(("." . "~/.config/emacs/backups/")))
   (setq backup-by-copying t)
+
+#+end_src
+
+ezri claims [[https://github.com/akermu/emacs-libvterm][libvterm]] is a real, actually decent, terminal emulator in emacs- big if true!
+
+it's.. ok. it's not perfect, and there's some weird handling of the cursor when exiting curses programs.
+definitely gotta set vterm-timer-delay low to avoid some jank there. that helps, but i'm not entirely sure if it's worth pursuing further, given the issues i had.
+
+#+begin_src emacs-lisp
+
+(use-package vterm
+  :ensure t
+  :config
+  (setq vterm-timer-delay 0.001))
 
 #+end_src
 
@@ -761,6 +853,7 @@ it just seems kinda neat
 essential commands are set with leader for accessibility
 
 org-roam could really use better keybinds- [[https://www.reddit.com/r/OrgRoam/comments/lxl353/what_keybinding_remaps_have_you_done_for_org_roam/][this reddit post]] has some ideas
+if i want to make key sequences for some of these, i would need to define a [[https://stackoverflow.com/questions/1024374/how-can-i-make-c-p-an-emacs-prefix-key-for-develperlysense][prefix]]. it might be worth setting this up for my org-roam stuff.
 
 #+begin_src emacs-lisp
 
@@ -775,13 +868,67 @@ org-roam could really use better keybinds- [[https://www.reddit.com/r/OrgRoam/co
     (kbd "<leader>f")  'org-roam-node-find
     (kbd "<leader>c")  'org-roam-capture
     (kbd "<leader>d")  'org-roam-dailies-goto-today
+    (kbd "<leader>p")  'org-roam-dailies-goto-previous-note
+    (kbd "<leader>n")  'org-roam-dailies-goto-next-note
+    (kbd "<leader>y")  'org-roam-dailies-goto-yesterday
+    (kbd "<leader>m")  'org-roam-dailies-goto-tomorrow
+    (kbd "<leader>D")  'org-roam-dailies-goto-date
+    (kbd "<leader>b")  'org-roam-buffer-toggle
     (kbd "<leader>t")  'org-roam-goto-todo
     (kbd "<leader>%")  'split-and-follow-vertically
-    (kbd "<leader>\"") 'split-and-follow-horizontally)
+    (kbd "<leader>\"") 'split-and-follow-horizontally
+    (kbd "gr") 'evil-replace-with-register
+    (kbd "gR") 'xref-find-references)
 
   #+end_src
 
+newline behavior is a little off of what i expect coming from vim. this little wrapper around ~newline~ fixes my problems.
+
+
 #+begin_src emacs-lisp
+
+  (defun my-newline ()
+    (interactive)
+    (evil-open-below 0)
+    (evil-normal-state)
+    (evil-previous-visual-line)
+    (evil-echo ""))
+
+#+end_src
+
+i was wrapping my newline around the original newline with the code below, but that was causing it's own issues- lots of other extensions use newline too, and expect it to work differently! now, i'm just mapping it to ~<RET>~ in normal mode, and that seems to be working pretty well.
+
+#+begin_src deprecated
+
+  (setq newline-copy (symbol-function 'newline))
+
+  (fset 'newline (lambda (&optional arg interactive)
+    (interactive)
+    (if (eq evil-state 'normal)
+      (my-newline)
+      (funcall newline-copy arg interactive))))
+
+#+end_src
+
+
+windmove is pretty decent, actually- this bind movements to ~s-<arrow>~, which is mostly fine on my keyboards.
+well, might not work so great on ryuko's integrated board. i might want to find a better solution in the future,
+but this'll have to do for now :>
+
+#+begin_src emacs-lisp
+  (windmove-default-keybindings)
+#+end_src
+
+[[https://github.com/abo-abo/avy][avy]] does seem pretty cool- there's also an [[https://github.com/louy2/evil-avy?tab=readme-ov-file][evil-avy]] package to bind them on top of evil commands that would make sense. this might be worth further exploration.
+
+****** TODO clean this up
+
+[[https://elpa.gnu.org/packages/bind-key.html][bind-key syntax helper]]
+
+#+begin_src emacs-lisp
+
+  (define-key minibuffer-local-completion-map (kbd "SPC")
+      (lambda () (interactive) (insert " ")))
 
   (require 'bind-key)
 
@@ -826,6 +973,8 @@ org-roam could really use better keybinds- [[https://www.reddit.com/r/OrgRoam/co
                     (interactive) (set-font-pixelsize 10))
                   'my-keys-minor-mode-map)
 
+  (bind-key "C-S-u" 'universal-argument)
+
   (use-package fzf
     :bind
     ;; todo: add some
@@ -842,6 +991,19 @@ org-roam could really use better keybinds- [[https://www.reddit.com/r/OrgRoam/co
         fzf/window-height 15))
 #+end_src
 
+** org keybinds?
+
+#+begin_src emacs-lisp
+
+  (defun insert-todo-h6 ()
+    (interactive)
+    (insert "****** TODO"))
+
+  (bind-key "C-c t" 'insert-todo-h6 'org-mode-map)
+
+#+end_src
+
 * todo
 
-[[https://github.com/hlissner/emacs-hide-mode-line][check out emacs-hide-mode-line to preserve some screen space]]
+****** TODO [[https://github.com/hlissner/emacs-hide-mode-line][check out emacs-hide-mode-line to preserve some screen space]]
+****** TODO [[https://lmno.lol/alvaro/hide-another-detail][configure dired]] to be more useful
