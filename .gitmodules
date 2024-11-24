@@ -3,34 +3,34 @@
 	url = https://github.com/VundleVim/Vundle.vim.git
 [submodule "dwm/.dwm"]
 	path = dwm/.dwm
-	url = git@github.com:phat-sumo/dwm.git
+	url = git@github.com:tetrachromat/dwm.git
 [submodule "st/.st"]
 	path = st/.st
-	url = git@github.com:phat-sumo/st.git
+	url = git@github.com:tetrachromat/st.git
 [submodule "dwmblocks/.dwmblocks"]
 	path = dwmblocks/.dwmblocks
-	url = git@github.com:phat-sumo/dwmblocks.git
+	url = git@github.com:tetrachromat/dwmblocks.git
 [submodule "hosts"]
 	path = hosts
-	url = git@bitbucket.org:phat-sumo/hosts.git
+	url = git@git.sr.ht:~tetrachromat/hosts
 [submodule "bg"]
 	path = bg
-	url = git@github.com:phat-sumo/bg.git
+	url = git@github.com:tetrachromat/bg.git
 [submodule "dmenu/.dmenu"]
 	path = dmenu/.dmenu
-	url = git@github.com:phat-sumo/dmenu.git
+	url = git@github.com:tetrachromat/dmenu.git
 [submodule "ag/.ag"]
 	path = ag/.ag
-	url = git@github.com:phat-sumo/the_silver_searcher.git
+	url = git@github.com:tetrachromat/the_silver_searcher.git
 [submodule "rend"]
 	path = rend
-	url = git@github.com:phat-sumo/rend.git
+	url = git@github.com:tetrachromat/rend.git
 [submodule "slock/.slock"]
 	path = slock/.slock
-	url = git@github.com:phat-sumo/slock.git
+	url = git@github.com:tetrachromat/slock.git
 [submodule "zsh-z"]
 	path = zsh-z
 	url = https://github.com/agkozak/zsh-z.git
 [submodule "scripts"]
 	path = scripts
-	url = git@github.com:phat-sumo/scripts.git
+	url = git@github.com:tetrachromat/scripts.git
