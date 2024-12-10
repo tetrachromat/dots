@@ -32,8 +32,9 @@ alias less="less -R"
 alias v='f -e nvim'
 alias git-adog='git log --all --decorate --oneline --graph'
 alias sl='ls'
-alias e='emacsclient --socket-name=/tmp/emacs1000/emacsd -r -n'
-alias ne='emacsclient --socket-name=/tmp/emacs1000/emacsd -c -n'
+# moved to a script now, left commented for history
+# alias e='emacsclient --socket-name=/tmp/emacs1000/emacsd -r -n'
+# alias ne='emacsclient --socket-name=/tmp/emacs1000/emacsd -c -n'
 
 if [[ $OS =~ "Linux" ]]; then
     alias ls="ls --color=auto"

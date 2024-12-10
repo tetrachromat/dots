@@ -7,9 +7,9 @@ export QT_QPA_PLATFORMTHEME=qt5ct
 export GTK_THEME=rend
 export QT_STYLE_OVERRIDE=qt5ct
 
-# ryuko autostart
+# magenta autostart
 # keep tmux from being dumb and autostart x server if we're on tty1
-if [[ $HOST == "ryuko" && -z "$TMUX" && $XDG_VTNR -eq 1 ]]; then
+if [[ $HOST == "magenta" && -z "$TMUX" && $XDG_VTNR -eq 1 ]]; then
 
   USAGE="  q quit
   m mobile

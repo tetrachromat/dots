@@ -36,10 +36,10 @@ super x {_,ctrl,ctrl shift}
 ### brightness ###
 
 XF86MonBrightnessUp {_,super,ctrl,ctrl shift,shift}
-	{xbacklight -inc 5,xbacklight -set 30,derp i,aderp i,notify-send -t 500 brightness: $(xbacklight -get)}
+	{xbacklight -inc 5; notify-send -t 500 $(xbacklight -get),xbacklight -set 30; notify-send -t 500 $(xbacklight -get),derp i,aderp i,notify-send -t 500 brightness: $(xbacklight -get)}
 
 XF86MonBrightnessDown {_,super,ctrl,ctrl shift,shift}
-	{xbacklight -dec 5,xbacklight -set 0,derp d,aderp d,notify-send -t 500 brightness: $(xbacklight -get)}
+	{xbacklight -dec 5; notify-send -t 500 $(xbacklight -get),xbacklight -set 0; notify-send -t 500 $(xbacklight -get),derp d,aderp d,notify-send -t 500 brightness: $(xbacklight -get)}
 
 ### media keys ###
 
@@ -57,7 +57,7 @@ XF86Tools
 
 # just escaping the commas in this command sequence
 super m  {_,shift}
-	playerctl -p {spotify\,vlc,vlc\,spotify} play-pause
+	playerctl -p {firefox\,vlc,vlc\,firefox} play-pause
 
 ### dwm ###
 

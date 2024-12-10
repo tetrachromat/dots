@@ -25,11 +25,11 @@ export LANG=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
 export LESSCHARSET=utf-8
 
-export GOPATH="/home/phat_sumo/.go"
-export GOMODPATH="/home/phat_sumo/.go/pkg/mod"
+export GOPATH="/home/tetrachromat/.go"
+export GOMODPATH="/home/tetrachromat/.go/pkg/mod"
 
 export TERM="xterm-256color"
-export WINEPREFIX="/home/phat_sumo/.wine"
+export WINEPREFIX="/home/tetrachromat/.wine"
 
 #export QT_QPA_PLATFORMTHEME=qt5ct
 
@@ -78,7 +78,7 @@ autoload -Uz zmv
 
 export N_PREFIX=$HOME/.n
 
-export PLAYDATE_SDK_PATH=/home/phat_sumo/.local/share/playdate-sdk-2.1.1
+export PLAYDATE_SDK_PATH=/home/tetrachromat/.local/share/playdate-sdk-2.1.1
 
 # paths
 export PATH=/usr/local/bin:/usr/games:$HOME/bin:$HOME/.gem/ruby/2.5.0/bin:$HOME/src/go/bin/:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.local/share/gem/ruby/3.0.0/bin:$HOME/.npm/bin:$N_PREFIX/bin:$HOME/.ghcup/bin:$PLAYDATE_SDK_PATH/bin:$PATH

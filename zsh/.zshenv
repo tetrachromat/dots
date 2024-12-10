@@ -71,7 +71,7 @@ autoload -Uz zmv
 
 export N_PREFIX=$HOME/.n
 
-export PLAYDATE_SDK_PATH=/home/phat_sumo/.local/share/playdate-sdk-2.1.1
+export PLAYDATE_SDK_PATH=/home/phat_sumo/.local/share/playdate-sdk
 
 export MOZ_USE_XINPUT2=1
 
