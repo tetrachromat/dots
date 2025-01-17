@@ -1,24 +1,24 @@
 [submodule "dwm/dot-dwm"]
 	path = dwm/dot-dwm
-	url = git@github.com:tetrachromat/dwm.git
+	url = git@git.sr.ht:~tetrachromat/dwm
 [submodule "dmenu/dot-dmenu"]
 	path = dmenu/dot-dmenu
-	url = git@github.com:tetrachromat/dmenu.git
+	url = git@git.sr.ht:~tetrachromat/dmenu
 [submodule "hosts"]
 	path = hosts
 	url = git@git.sr.ht:~tetrachromat/hosts
 [submodule "dwmblocks/dot-dwmblocks"]
 	path = dwmblocks/dot-dwmblocks
-	url = git@github.com:tetrachromat/dwmblocks.git
+	url = git@git.sr.ht:~tetrachromat/dwmblocks
 [submodule "st/dot-st"]
 	path = st/dot-st
-	url = git@github.com:tetrachromat/st.git
+	url = git@git.sr.ht:~tetrachromat/st
 [submodule "slock/dot-slock"]
 	path = slock/dot-slock
-	url = git@github.com:tetrachromat/slock.git
+	url = git@git.sr.ht:~tetrachromat/slock
 [submodule "scripts"]
 	path = scripts
-	url = git@github.com:tetrachromat/scripts.git
+	url = git@git.sr.ht:~tetrachromat/scripts
 [submodule "zsh-z"]
 	path = zsh-z
 	url = https://github.com/agkozak/zsh-z.git
