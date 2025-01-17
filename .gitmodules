@@ -16,3 +16,6 @@
 [submodule "slock/dot-slock"]
 	path = slock/dot-slock
 	url = git@github.com:tetrachromat/slock.git
+[submodule "scripts"]
+	path = scripts
+	url = git@github.com:tetrachromat/scripts.git
