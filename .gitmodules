@@ -1,3 +1,6 @@
 [submodule "dwm/dot-dwm"]
 	path = dwm/dot-dwm
 	url = git@github.com:tetrachromat/dwm.git
+[submodule "dmenu/dot-dmenu"]
+	path = dmenu/dot-dmenu
+	url = git@github.com:tetrachromat/dmenu.git
