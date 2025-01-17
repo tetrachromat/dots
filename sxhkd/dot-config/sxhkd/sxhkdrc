@@ -1,0 +1,120 @@
+# sxhkd config
+
+super + Escape
+	msv restart sxhkd; \
+	notify-send -t 1000 "sxhkd restarted"
+
+### program launching ###
+
+super Return {_,shift}
+	{st, emacsclient --socket-name=/tmp/emacs1000/emacsd -c -n}
+
+super c
+	firefox --new-window
+
+super d
+	dmenu_run -i -hp discord
+
+# for some reason this sleep is required to get the keyboard back from sxhkd
+super s
+	sleep 0.1 && screenshot
+
+super {y,e}
+	dwmc {togglescratch, toggleemacs}
+
+super u {_,ctrl}
+	dunstctl {close,set-paused toggle}
+
+### sleep & hibernate ###
+
+super ctrl z {_,shift}
+	sudo {zzz,ZZZ}
+
+super x {_,ctrl,ctrl shift}
+	{slock,slock &; sudo zzz,slock &; sudo ZZZ}
+
+### brightness ###
+
+XF86MonBrightnessUp {_,super,ctrl,ctrl shift,shift}
+	{xbacklight -inc 5; notify-send -t 500 $(xbacklight -get),xbacklight -set 30; notify-send -t 500 $(xbacklight -get),derp i,aderp i,notify-send -t 500 brightness: $(xbacklight -get)}
+
+XF86MonBrightnessDown {_,super,ctrl,ctrl shift,shift}
+	{xbacklight -dec 5; notify-send -t 500 $(xbacklight -get),xbacklight -set 0; notify-send -t 500 $(xbacklight -get),derp d,aderp d,notify-send -t 500 brightness: $(xbacklight -get)}
+
+### media keys ###
+
+XF86AudioLowerVolume
+	vold
+
+XF86AudioRaiseVolume
+	volu
+
+XF86AudioMute
+	volm
+
+XF86AudioMicMute
+	volg
+
+#XF86Tools
+	#volg
+
+# just escaping the commas in this command sequence
+super m  {_,shift}
+	playerctl -p {firefox\,vlc,vlc\,firefox} play-pause
+
+### dwm ###
+
+super {k,j}
+	dwmc focusstack {-,+}1
+
+super {o,i}
+	dwmc incnmaster {-,+}1
+
+super shift {k,j}
+	dwmc movestack {-,+}1
+
+super {h,l}
+	dwmc setmfact {-,+}0.05
+
+super shift space
+	dwmc togglefloating
+
+super shift q
+	dwmc killclient
+
+super ctrl shift {q,r}
+	dwmc quit {0,1}
+
+super Tab
+	dwmc viewprev
+
+super space
+	dwmc zoom
+
+super {t,f}
+	dwmc setlayoutex {0,2}
+
+super {_,ctrl}{_,shift} {1-9}
+  dwmc {_,toggle}{viewex,tagex} {0-8}
+
+super {_,ctrl}{_,shift} {0}
+  dwmc {_,toggle}{viewex,tagex} {9}
+
+super {_,shift} {period,comma}
+	dwmc {focusmon,tagmon} {-,+}1
+
+super minus
+	dwmc viewall
+
+super shift {a,s}
+	dwmc setgaps {-,+}1
+
+super shift ctrl s
+	dwmc setgaps 0
+
+# manage bar turning on or off via super,with any modifier combination
+Super_L {_,ctrl} {_,alt} {_,shift}
+	dwmc holdbar 1
+
+@Super_L {_,ctrl} {_,alt} {_,shift}
+	dwmc holdbar 0

@@ -8,12 +8,15 @@ emacs/dot-config/emacs/autosave/
 emacs/dot-config/emacs/auto-save-list/
 emacs/dot-config/emacs/backups/
 emacs/dot-config/emacs/bookmarks
+emacs/dot-config/emacs/.cache
+emacs/dot-config/emacs/conf.el
 emacs/dot-config/emacs/eln-cache/
 emacs/dot-config/emacs/elpa/
 emacs/dot-config/emacs/elpaca/
 emacs/dot-config/emacs/.org-id-locations
 emacs/dot-config/emacs/org-roam.db
 emacs/dot-config/emacs/places
+emacs/dot-config/emacs/projects
 emacs/dot-config/emacs/tramp
 emacs/dot-config/emacs/tree-sitter/
 emacs/dot-config/emacs/.lsp-session-*
