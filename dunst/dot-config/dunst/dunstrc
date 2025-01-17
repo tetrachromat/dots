@@ -1,0 +1,61 @@
+[global]
+
+  ### look and feel
+
+  font = "Monoid 8"
+  alignment = center
+  word_wrap = true
+  separator_height = 0
+  padding = 5
+  horizontal_padding = 5
+  frame_color = "#fe3198"
+  frame_width = 2
+
+  ### functionality 
+
+  # how to open dmenu for context
+  dmenu = /usr/local/bin/dmenu -p dunst:
+  # do not clear notifications if idle for this amount of time
+  idle_threshold = 5m
+  show_age_threshold = 60s
+  sticky_history = true
+  # do not follow focus, go to specific monitor
+  follow = none
+
+# deprecated
+#[shortcuts]
+#  close = ctrl+space
+#  close_all = ctrl+shift+space
+#  context = ctrl+shift+period
+#  history = ctrl+shift+comma
+
+[urgency_low]
+  background = "#030303"
+  foreground = "#fbf5f3"
+  timeout = 10
+
+[urgency_normal]
+  background = "#030303"
+  foreground = "#fbf5f3"
+  timeout = 20
+
+[urgency_critical]
+  background = "#030303"
+  foreground = "#fe3198"
+  timeout = 100
+
+[no_kdeconnect_spotify]
+  appname = "KDE Connect"
+  summary = "*Spotify*"
+  skip_display = true
+
+[no_kdeconnect_downloads]
+  appname = "KDE Connect"
+  summary = "*Download*"
+  skip_display = true
+
+[no_kdeconnect_telegram]
+  appname = "KDE Connect"
+  summary = "*Telegram*"
+  skip_display = true
+
