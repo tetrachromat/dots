@@ -4,3 +4,6 @@
 [submodule "dmenu/dot-dmenu"]
 	path = dmenu/dot-dmenu
 	url = git@github.com:tetrachromat/dmenu.git
+[submodule "hosts"]
+	path = hosts
+	url = git@git.sr.ht:~tetrachromat/hosts
