@@ -7,3 +7,6 @@
 [submodule "hosts"]
 	path = hosts
 	url = git@git.sr.ht:~tetrachromat/hosts
+[submodule "dwmblocks/dot-dwmblocks"]
+	path = dwmblocks/dot-dwmblocks
+	url = git@github.com:tetrachromat/dwmblocks.git
