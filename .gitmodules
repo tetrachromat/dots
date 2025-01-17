@@ -1,0 +1,3 @@
+[submodule "dwm/dot-dwm"]
+	path = dwm/dot-dwm
+	url = git@github.com:tetrachromat/dwm.git
