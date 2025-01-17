@@ -10,3 +10,6 @@
 [submodule "dwmblocks/dot-dwmblocks"]
 	path = dwmblocks/dot-dwmblocks
 	url = git@github.com:tetrachromat/dwmblocks.git
+[submodule "st/dot-st"]
+	path = st/dot-st
+	url = git@github.com:tetrachromat/st.git
