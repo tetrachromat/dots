@@ -13,3 +13,6 @@
 [submodule "st/dot-st"]
 	path = st/dot-st
 	url = git@github.com:tetrachromat/st.git
+[submodule "slock/dot-slock"]
+	path = slock/dot-slock
+	url = git@github.com:tetrachromat/slock.git
