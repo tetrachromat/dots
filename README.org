@@ -1,3 +1,5 @@
 * dots
 
 tetrachromat's dotfiles
+
+s/github.com/git.sr.ht/g
