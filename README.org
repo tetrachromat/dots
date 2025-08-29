@@ -2,4 +2,4 @@
 
 tetrachromat's dotfiles
 
-s/github.com/git.sr.ht/g
+s/github.com\//git.sr.ht\/~/
